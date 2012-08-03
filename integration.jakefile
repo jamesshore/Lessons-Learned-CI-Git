@@ -1,19 +1,28 @@
-task("default", function() {
-	console.log("Use -T option to see integration targets");
-});
+// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-desc("Reset repository to last known-good integration. DESTRUCTIVE.");
-task("reset", function(confirm) {
-	if (confirm !== "y") {
-		console.log("This command will erase all your un-integrated work.");
-		console.log("To confirm, run using 'reset[y]'");
-		process.exit();
+/*global desc, task, jake, fail, complete */
+(function() {
+	"use strict";
+
+	task("default", function() {
+		console.log("Use -T option to see integration targets");
+	});
+
+	desc("Reset repository to last known-good integration. DESTRUCTIVE.");
+	task("reset", function(confirm) {
+		if (confirm !== "y") {
+			console.log("This command will erase all your un-integrated work.");
+			console.log("To confirm, run using 'reset[y]'");
+			process.exit();
+		}
+
+		exec("git pull");
+		exec("git reset --hard origin/integration");
+		exec("git clean -fd");
+	});
+
+	function exec(command) {
+		console.log(command);
+//		jake.exec(command);
 	}
-
-	exec("git pull");
-});
-
-function exec(command) {
-	console.log(command);
-	jake.exec(command);
-}
+}());
