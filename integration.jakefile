@@ -56,9 +56,10 @@ var BUILD_COMMAND = "./jake.sh";
 		}
 
 		sh([
-			"git pull",
-			"git reset --hard origin/integration",
-			"git clean -fd"
+			"git clean -fd",                            // Remove extraneous files
+			"git reset --hard origin/integration",      // Eliminate conflicts
+			"git pull",                                 // Get updates to integration branch location
+			"git reset --hard origin/integration"       // Sync with latest integration branch
 		], complete);
 	}, {async: true});
 
