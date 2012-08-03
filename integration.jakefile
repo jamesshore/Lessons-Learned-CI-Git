@@ -6,11 +6,13 @@ var BUILD_COMMAND = "./jake.sh";
 (function() {
 	"use strict";
 
+	desc("Usage instructions");
 	task("default", function() {
 		console.log(
 			"Usage:\n" +
-			"1. When starting fresh, run 'reset' to get back to known-good state.\n" +
-			"2. When you're ready to integrate:\n" +
+			"1. For instructions on setting up your repository, run 'init'.\n" +
+			"2. When starting fresh, run 'reset' to get back to known-good state.\n" +
+			"3. When you're ready to integrate:\n" +
 			"   a. *Confirm* that all changes are committed and the code builds clean.\n" +
 			"   b. *Run* 'pull' to merge the latest known-good code into your local copy.\n" +
 			"   c. *Build* the code and ensure it passes.\n" +
@@ -24,10 +26,31 @@ var BUILD_COMMAND = "./jake.sh";
 		);
 	});
 
+	desc("Instructions for setting up repository");
+	task("init", function() {
+		console.log(
+			"To set up your Git repository for continuous integration:\n" +
+			"1. Choose an unused development workstation to use as the integration machine.\n" +
+			"2. Merge all your unintegrated code into a single repository and get it to\n" +
+			"   build clean. This will be your master integration repository.\n" +
+			"3. Copy your master integration repository to the integration machine.\n" +
+			"4. Make sure the repository HEAD points to your integrated, known-good code.\n" +
+			"5. Create an integration branch by running 'git checkout -b integration'.\n" +
+			"   (This will also switch you to that branch.)\n" +
+			"6. Create a branch for each development workstation by running\n" +
+			"   'git branch <workstation_name>' for each one.\n" +
+			"7. Clone the integration machine's repository to each development machine by\n" +
+			"   running 'git clone <integration_repository_url>' on each dev machine.\n" +
+			"8. Switch each development workstation to use its own branch by running\n" +
+			"   'git checkout <workstation_name>' on each one.\n" +
+			"9. That's it!\n"
+		);
+	});
+
 	desc("Reset repository to last known-good integration. DESTRUCTIVE.");
 	task("reset", function(confirm) {
 		if (confirm !== "y") {
-			console.log("This command will erase all your un-integrated work.");
+			console.log("WARNING: This command will erase all your un-integrated work.");
 			console.log("To confirm, run using 'reset[y]'");
 			process.exit();
 		}
@@ -58,8 +81,8 @@ var BUILD_COMMAND = "./jake.sh";
 		if (!branch) {
 			console.log(
 				"This command will build your code and merge it into the integration\n" +
-				"branch. Pass your branch name as a parameter (e.g., 'promote[myBranch]').\n" +
-				"This command must be run on the master integration machine."
+				"branch. Pass your branch name as a parameter ('promote[workstation_name]').\n" +
+				"CAREFUL: This command must only be run on the master integration machine.\n"
 			);
 			process.exit();
 		}
