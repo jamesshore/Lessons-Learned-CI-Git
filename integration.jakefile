@@ -37,7 +37,7 @@
 		], complete);
 	}, {async: true});
 
-	desc("Merge code into integration branch. RUN ON INTEGRATION BOX ONLY.");
+	desc("Merge code into integration branch. INTEGRATION BOX ONLY.");
 	task("promote", function(branch) {
 		if (!branch) {
 			console.log(
