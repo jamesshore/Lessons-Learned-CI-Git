@@ -1,5 +1,7 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
+var BUILD_COMMAND = "./jake.sh";
+
 /*global desc, task, jake, fail, complete */
 (function() {
 	"use strict";
@@ -66,7 +68,7 @@
 			sh([
 				"git checkout " + branch
 			], function() {
-				shWithErrorHandler("./jake.sh", successCallback, failureCallback);
+				shWithErrorHandler(BUILD_COMMAND, successCallback, failureCallback);
 			});
 		}
 		function afterSuccessfulBuild(callback) {
