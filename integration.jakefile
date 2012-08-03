@@ -12,7 +12,7 @@ var BUILD_COMMAND = "./jake.sh";
 			"Integration quick reference:\n" +
 			"   1. Confirm good build\n" +
 			"   2. 'pull' (and confirm good build)\n" +
-			"   3. 'push'\n" +
+			"   3. 'push[<workstation_name>]'\n" +
 			"   4. On integration machine: 'promote[<workstation_name>]'\n" +
 			"\n" +
 			"Start over if the build fails or someone else integrates before you finish.\n" +
@@ -90,9 +90,16 @@ var BUILD_COMMAND = "./jake.sh";
 	}, {async: true});
 
 	desc("Push commits to integration machine for validation.");
-	task("push", ["status"], function() {
+	task("push", ["status"], function(branch) {
+		if (!branch) {
+			console.log(
+				"This command will push your code to the integration machine. Pass your\n" +
+				"branch name as a paraemeter (e.g., 'push[workstation_name]').\n"
+			);
+			process.exit();
+		}
 		sh([
-			"git push"
+			"git push " + branch
 		], complete);
 	}, {async: true});
 
