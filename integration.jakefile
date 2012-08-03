@@ -64,21 +64,21 @@ var BUILD_COMMAND = "./jake.sh";
 	}, {async: true});
 
 	desc("Get latest known-good code and merge it into current branch.");
-	task("pull", function() {
+	task("pull", ["status"], function() {
 		sh([
 			"git pull origin integration"
 		], complete);
 	}, {async: true});
 
 	desc("Push commits to integration machine for validation.");
-	task("push", function() {
+	task("push", ["status"], function() {
 		sh([
 			"git push"
 		], complete);
 	}, {async: true});
 
 	desc("Merge code into integration branch. INTEGRATION BOX ONLY.");
-	task("promote", function(branch) {
+	task("promote", ["status"], function(branch) {
 		if (!branch) {
 			console.log(
 				"This command will build your code and merge it into the integration\n" +
@@ -95,47 +95,61 @@ var BUILD_COMMAND = "./jake.sh";
 				shWithErrorHandler(BUILD_COMMAND, successCallback, failureCallback);
 			});
 		}
-		function afterSuccessfulBuild(callback) {
+		function afterSuccessfulBuild() {
 			sh([
 				"git checkout integration",
 				"git merge " + branch + " --no-ff --log"
-			], callback);
+			], complete);
 		}
-		function afterFailedBuild(callback) {
+		function afterFailedBuild() {
 			sh([
 				"git checkout integration"
 			], function() {
 				fail("Build failed. Integration machine has been reset to known-good state.");
-				callback();
+				complete();
 			});
 		}
 
 		checkoutAndBuild(afterSuccessfulBuild, afterFailedBuild);
-	});
+	}, {async:true});
+
+	// Ensure there aren't any files that need to be checked in or ignored
+	task("status", function() {
+		sh(["git status --porcelain"], function(stdout) {
+			if (stdout[0]) fail("Working directory contains files to commit or ignore.");
+			complete();
+		});
+	}, {async:true});
 
 	function sh(commands, callback) {
+		var stdout = [];
 		function serializedExec(command) {
 			if (command) {
-				shWithErrorHandler(command, function() {
+				shWithErrorHandler(command, function(oneStdout) {
+					stdout.push(oneStdout)
 					serializedExec(commands.shift());
 				}, function() {
 					fail("shell command exited with error code");
 				});
 			}
 			else {
-				callback();
+				callback(stdout);
 			}
 		}
 		serializedExec(commands.shift());
 	}
 
 	function shWithErrorHandler(oneCommand, successCallback, failureCallback) {
+		var stdout = "";
 		var process = jake.createExec(oneCommand, {printStdout:true, printStderr:true});
+		process.on("stdout", function(data) {
+			stdout += data;
+		});
 		process.on("cmdEnd", function() {
-			successCallback();
+			successCallback(stdout);
 		});
 		process.on("error", function() {
-			failureCallback();
+			failureCallback(stdout);
 		});
 
 		console.log("> " + oneCommand);
