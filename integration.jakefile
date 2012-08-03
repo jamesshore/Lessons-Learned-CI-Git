@@ -15,7 +15,7 @@ var BUILD_COMMAND = "./jake.sh";
 			"   3. 'push[<workstation_name>]'\n" +
 			"   4. On integration machine: 'promote[<workstation_name>]'\n" +
 			"\n" +
-			"Start over if the build fails or someone else integrates before you finish.\n" +
+			"Start over if someone else integrates after you 'pull' and before you finish.\n" +
 			"For full usage instructions, run 'usage' target.\n"
 		);
 	});
@@ -34,6 +34,7 @@ var BUILD_COMMAND = "./jake.sh";
 			"   1. Confirm the code builds clean.\n" +
 			"   2. Commit your changes.\n" +
 			"   3. Run 'pull' to merge the latest known-good code into your local copy.\n" +
+			"      (If there's a merge conflict, fix it and commit.)\n" +
 			"   4. Confirm the merged code builds clean. (If it doesn't, fix the problem\n" +
 			"      and start over.)\n" +
 			"   d. Confirm that the integration machine is available and no one has\n" +
