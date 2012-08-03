@@ -12,8 +12,8 @@ var BUILD_COMMAND = "./jake.sh";
 			"Usage:\n" +
 			"1. For instructions on setting up your repository, run 'init'.\n" +
 			"2. When starting fresh, run 'reset' to get back to known-good state.\n" +
-			"3. When you're ready to integrate:\n" +
-			"   a. *Confirm* that all changes are committed and the code builds clean.\n" +
+			"3. When you're ready to integrate, commit your changes and:\n" +
+			"   a. *Confirm* that the code builds clean.\n" +
 			"   b. *Run* 'pull' to merge the latest known-good code into your local copy.\n" +
 			"   c. *Build* the code and ensure it passes.\n" +
 			"      (If it doesn't, fix the problem and start over.)\n" +
