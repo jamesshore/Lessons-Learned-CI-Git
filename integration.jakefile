@@ -70,8 +70,10 @@ var BUILD_COMMAND = "./jake.sh";
 	desc("Reset repository to last known-good integration. DESTRUCTIVE.");
 	task("reset", function(confirm) {
 		if (confirm !== "y") {
-			console.log("WARNING: This command will erase all your un-integrated work.");
-			console.log("To confirm, run using 'reset[y]'");
+			console.log(
+				"WARNING: This command will erase all your un-integrated work.\n" +
+				"To confirm, run using 'reset[y]'\n"
+			);
 			fail("Reset not confirmed");
 		}
 
