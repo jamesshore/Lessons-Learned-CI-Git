@@ -94,7 +94,7 @@ var BUILD_COMMAND = "./jake.sh";
 		if (!branch) {
 			console.log(
 				"This command will push your code to the integration machine. Pass your\n" +
-				"branch name as a paraemeter (e.g., 'push[workstation_name]').\n"
+				"branch name as a parameter (e.g., 'push[workstation_name]').\n"
 			);
 			process.exit();
 		}
