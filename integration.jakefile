@@ -37,10 +37,10 @@ var BUILD_COMMAND = "./jake.sh";
 			"      (If there's a merge conflict, fix it and commit.)\n" +
 			"   4. Confirm the merged code builds clean. (If it doesn't, fix the problem\n" +
 			"      and start over.)\n" +
-			"   d. Confirm that the integration machine is available and no one has\n" +
+			"   5. Confirm that the integration machine is available and no one has\n" +
 			"      integrated since you pulled. (If they have, start over when they're done.)\n" +
-			"   e. Run 'push' to copy your code to the integration machine.\n" +
-			"   f. Run 'promote' on the integration machine to build the code and merge it\n" +
+			"   6. Run 'push' to copy your code to the integration machine.\n" +
+			"   7. Run 'promote' on the integration machine to build the code and merge it\n" +
 			"      into the integration branch. (If the integration machine build fails,\n" +
 			"      fix the problem on your machine and start over.)\n"
 		);
