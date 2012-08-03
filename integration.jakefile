@@ -16,13 +16,89 @@
 			process.exit();
 		}
 
-		exec("git pull");
-		exec("git reset --hard origin/integration");
-		exec("git clean -fd");
+		sh([
+			"git pull",
+			"git reset --hard origin/integration",
+			"git clean -fd"
+		], complete);
+	}, {async: true});
+
+	desc("Get latest known-good code and merge it into current branch.");
+	task("pull", function() {
+		sh([
+			"git pull origin integration"
+		], complete);
+	}, {async: true});
+
+	desc("Push commits to integration machine for validation.");
+	task("push", function() {
+		sh([
+			"git push"
+		], complete);
+	}, {async: true});
+
+	desc("Merge code into integration branch. RUN ON INTEGRATION BOX ONLY.");
+	task("promote", function(branch) {
+		if (!branch) {
+			console.log(
+				"This command will build your code and merge it into the integration\n" +
+				"branch. Pass your branch name as a parameter (e.g., 'promote[myBranch]').\n" +
+				"This command must be run on the master integration machine."
+			);
+			process.exit();
+		}
+
+		function checkoutAndBuild(successCallback, failureCallback) {
+			sh([
+				"git checkout " + branch
+			], function() {
+				shWithErrorHandler("./jake.sh", successCallback, failureCallback);
+			});
+		}
+		function afterSuccessfulBuild(callback) {
+			sh([
+				"git checkout integration",
+				"git merge " + branch + " --no-ff --log"
+			], callback);
+		}
+		function afterFailedBuild(callback) {
+			sh([
+				"git checkout integration"
+			], function() {
+				fail("Build failed. Integration machine has been reset to known-good state.");
+				callback();
+			});
+		}
+
+		checkoutAndBuild(afterSuccessfulBuild, afterFailedBuild);
 	});
 
-	function exec(command) {
-		console.log(command);
-//		jake.exec(command);
+	function sh(commands, callback) {
+		function serializedExec(command) {
+			if (command) {
+				shWithErrorHandler(command, function() {
+					serializedExec(commands.shift());
+				}, function() {
+					fail("shell command exited with error code");
+				});
+			}
+			else {
+				callback();
+			}
+		}
+		serializedExec(commands.shift());
+	}
+
+	function shWithErrorHandler(oneCommand, successCallback, failureCallback) {
+		var process = jake.createExec(oneCommand, {printStdout:true, printStderr:true});
+		process.on("cmdEnd", function() {
+			successCallback();
+		});
+		process.on("error", function() {
+			failureCallback();
+		});
+
+		console.log("> " + oneCommand);
+		process.run();
 	}
 }());
