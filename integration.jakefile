@@ -126,7 +126,7 @@ var BUILD_COMMAND = "./jake.sh";
 		function serializedExec(command) {
 			if (command) {
 				shWithErrorHandler(command, function(oneStdout) {
-					stdout.push(oneStdout)
+					stdout.push(oneStdout);
 					serializedExec(commands.shift());
 				}, function() {
 					fail("shell command exited with error code");
