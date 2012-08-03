@@ -6,21 +6,40 @@ var BUILD_COMMAND = "./jake.sh";
 (function() {
 	"use strict";
 
-	desc("Usage instructions");
+	desc("Quick reference");
 	task("default", function() {
 		console.log(
+			"Integration quick reference:\n" +
+			"   1. Confirm good build\n" +
+			"   2. 'pull' (and confirm good build)\n" +
+			"   3. 'push'\n" +
+			"   4. On integration machine: 'promote[<workstation_name>]'\n" +
+			"\n" +
+			"Start over if the build fails or someone else integrates before you finish.\n" +
+			"For full usage instructions, run 'usage' target.\n"
+		);
+	});
+
+	desc("Usage instructions");
+	task("usage", function() {
+		console.log(
 			"Usage:\n" +
-			"1. For instructions on setting up your repository, run 'init'.\n" +
-			"2. When starting fresh, run 'reset' to get back to known-good state.\n" +
-			"3. When you're ready to integrate, commit your changes and:\n" +
-			"   a. *Confirm* that the code builds clean.\n" +
-			"   b. *Run* 'pull' to merge the latest known-good code into your local copy.\n" +
-			"   c. *Build* the code and ensure it passes.\n" +
-			"      (If it doesn't, fix the problem and start over.)\n" +
-			"   d. *Confirm* that the integration machine is available and no one has\n" +
+			"For instructions on setting up your repository, run the 'init' target.\n" +
+			"\n" +
+			"To reset your repository to known-good state:\n" +
+			"   1. Run 'reset' target with 'y' parameter. (WARNING: deletes ALL changes\n" +
+			"       on the machine since the last successful integration, INCLUDING commits.)\n" +
+			"\n" +
+			"To integrate your changes:\n" +
+			"   1. Confirm the code builds clean.\n" +
+			"   2. Commit your changes.\n" +
+			"   3. Run 'pull' to merge the latest known-good code into your local copy.\n" +
+			"   4. Confirm the merged code builds clean. (If it doesn't, fix the problem\n" +
+			"      and start over.)\n" +
+			"   d. Confirm that the integration machine is available and no one has\n" +
 			"      integrated since you pulled. (If they have, start over when they're done.)\n" +
-			"   e. *Run* 'push' to copy your code to the integration machine.\n" +
-			"   f. *Run* 'promote' on the integration machine to build the code and merge it\n" +
+			"   e. Run 'push' to copy your code to the integration machine.\n" +
+			"   f. Run 'promote' on the integration machine to build the code and merge it\n" +
 			"      into the integration branch. (If the integration machine build fails,\n" +
 			"      fix the problem on your machine and start over.)\n"
 		);
