@@ -8,16 +8,17 @@
 		console.log(
 			"Usage:\n" +
 			"1. When starting fresh, run 'reset' to get back to known-good state.\n" +
-			"2. When ready to integrate:\n" +
-			"   a. Make sure everything's checked in and the code builds clean.\n" +
-			"   b. Run 'pull' to integrate the latest known-good code.\n" +
-			"   c. Build code and ensure it passes.\n" +
+			"2. When you're ready to integrate:\n" +
+			"   a. *Confirm* that all changes are committed and the code builds clean.\n" +
+			"   b. *Run* 'pull' to merge the latest known-good code into your local copy.\n" +
+			"   c. *Build* the code and ensure it passes.\n" +
 			"      (If it doesn't, fix the problem and start over.)\n" +
-			"   d. Confirm that integration machine is available and no one has integrated\n" +
-			"      since you pulled. (If they have, start over when they're done.)\n" +
-			"   e. Run 'push' to copy your code to the integration machine.\n" +
-			"   f. Run 'promote' on the integration machine. (If the integration machine\n" +
-			"      build fails, fix the problem on your machine and start over.)\n"
+			"   d. *Confirm* that the integration machine is available and no one has\n" +
+			"      integrated since you pulled. (If they have, start over when they're done.)\n" +
+			"   e. *Run* 'push' to copy your code to the integration machine.\n" +
+			"   f. *Run* 'promote' on the integration machine to build the code and merge it\n" +
+			"      into the integration branch. (If the integration machine build fails,\n" +
+			"      fix the problem on your machine and start over.)\n"
 		);
 	});
 
