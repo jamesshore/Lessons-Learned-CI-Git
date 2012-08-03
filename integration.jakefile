@@ -99,7 +99,7 @@ var BUILD_COMMAND = "./jake.sh";
 			process.exit();
 		}
 		sh([
-			"git push " + branch
+			"git push origin " + branch
 		], complete);
 	}, {async: true});
 
