@@ -72,7 +72,7 @@ var BUILD_COMMAND = "./jake.sh";
 		if (confirm !== "y") {
 			console.log("WARNING: This command will erase all your un-integrated work.");
 			console.log("To confirm, run using 'reset[y]'");
-			process.exit();
+			fail("Reset not confirmed");
 		}
 
 		sh([
@@ -96,7 +96,7 @@ var BUILD_COMMAND = "./jake.sh";
 				"This command will push your code to the integration machine. Pass your\n" +
 				"branch name as a parameter (e.g., 'push[workstation_name]').\n"
 			);
-			process.exit();
+			fail("No branch provided");
 		}
 		sh([
 			"git push origin " + branch
@@ -111,7 +111,7 @@ var BUILD_COMMAND = "./jake.sh";
 				"branch. Pass your branch name as a parameter ('promote[workstation_name]').\n" +
 				"CAREFUL: This command must only be run on the master integration machine.\n"
 			);
-			process.exit();
+			fail("No branch provided");
 		}
 
 		function checkoutAndBuild(successCallback, failureCallback) {
@@ -149,11 +149,11 @@ var BUILD_COMMAND = "./jake.sh";
 
 	function sh(commands, callback) {
 		var stdout = [];
-		function serializedExec(command) {
+		function serializedSh(command) {
 			if (command) {
 				shWithErrorHandler(command, function(oneStdout) {
 					stdout.push(oneStdout);
-					serializedExec(commands.shift());
+					serializedSh(commands.shift());
 				}, function() {
 					fail("shell command exited with error code");
 				});
@@ -162,7 +162,7 @@ var BUILD_COMMAND = "./jake.sh";
 				callback(stdout);
 			}
 		}
-		serializedExec(commands.shift());
+		serializedSh(commands.shift());
 	}
 
 	function shWithErrorHandler(oneCommand, successCallback, failureCallback) {
