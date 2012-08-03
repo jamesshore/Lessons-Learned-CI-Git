@@ -1,3 +1,19 @@
 task("default", function() {
-	console.log("Hi.");
+	console.log("Use -T option to see integration targets");
 });
+
+desc("Reset repository to last known-good integration. DESTRUCTIVE.");
+task("reset", function(confirm) {
+	if (confirm !== "y") {
+		console.log("This command will erase all your un-integrated work.");
+		console.log("To confirm, run using 'reset[y]'");
+		process.exit();
+	}
+
+	exec("git pull");
+});
+
+function exec(command) {
+	console.log(command);
+	jake.exec(command);
+}
