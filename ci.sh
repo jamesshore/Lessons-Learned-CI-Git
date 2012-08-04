@@ -1,1 +1,1 @@
-node_modules/.bin/jake -f integration.jakefile $*
+node_modules/.bin/jake -f ci.jakefile $*
