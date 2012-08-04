@@ -117,12 +117,11 @@ var BUILD_COMMAND = "./jake.sh";
 		}
 
 		function checkoutAndBuild(successCallback, failureCallback) {
-			sh([
+			shWithErrorHandler([
 				"git checkout " + branch,
-				"git merge integration --ff-only"   // make sure integration branch has already been merged
-			], function() {
-				shWithErrorHandler(BUILD_COMMAND, successCallback, failureCallback);
-			});
+				"git merge integration --ff-only",   // make sure integration branch has already been merged
+				BUILD_COMMAND
+			], successCallback, failureCallback);
 		}
 		function afterSuccessfulBuild() {
 			sh([
@@ -151,24 +150,28 @@ var BUILD_COMMAND = "./jake.sh";
 	}, {async:true});
 
 	function sh(commands, callback) {
+		shWithErrorHandler(commands, callback, function() {
+			fail("shell command exited with error code");
+		});
+	}
+
+	function shWithErrorHandler(commands, successCallback, failureCallback) {
 		var stdout = [];
 		function serializedSh(command) {
 			if (command) {
-				shWithErrorHandler(command, function(oneStdout) {
+				oneSh(command, function(oneStdout) {
 					stdout.push(oneStdout);
 					serializedSh(commands.shift());
-				}, function() {
-					fail("shell command exited with error code");
-				});
+				}, failureCallback);
 			}
 			else {
-				callback(stdout);
+				successCallback(stdout);
 			}
 		}
 		serializedSh(commands.shift());
 	}
 
-	function shWithErrorHandler(oneCommand, successCallback, failureCallback) {
+	function oneSh(oneCommand, successCallback, failureCallback) {
 		var stdout = "";
 		var process = jake.createExec(oneCommand, {printStdout:true, printStderr:true});
 		process.on("stdout", function(data) {
