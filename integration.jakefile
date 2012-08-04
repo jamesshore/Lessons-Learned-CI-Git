@@ -118,7 +118,8 @@ var BUILD_COMMAND = "./jake.sh";
 
 		function checkoutAndBuild(successCallback, failureCallback) {
 			sh([
-				"git checkout " + branch
+				"git checkout " + branch,
+				"git merge integration --ff-only"   // make sure integration branch has already been merged
 			], function() {
 				shWithErrorHandler(BUILD_COMMAND, successCallback, failureCallback);
 			});
@@ -133,7 +134,7 @@ var BUILD_COMMAND = "./jake.sh";
 			sh([
 				"git checkout integration"
 			], function() {
-				fail("Build failed. Integration machine has been reset to known-good state.");
+				fail("Integration failed. Integration machine has been reset to known-good state.");
 				complete();
 			});
 		}
