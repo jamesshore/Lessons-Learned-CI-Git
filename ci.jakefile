@@ -133,7 +133,7 @@ var BUILD_COMMAND = "./jake.sh";
 			sh([
 				"git checkout integration"
 			], function() {
-				fail("Integration failed. Integration machine has been reset to known-good state.");
+				fail("Integration failed. Integration machine reset to known-good state.");
 				complete();
 			});
 		}
