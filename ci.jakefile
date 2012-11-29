@@ -1,8 +1,8 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+/*global desc, task, jake, fail, complete */
 
 var BUILD_COMMAND = "./jake.sh";
 
-/*global desc, task, jake, fail, complete */
 (function() {
 	"use strict";
 
@@ -33,16 +33,17 @@ var BUILD_COMMAND = "./jake.sh";
 			"To integrate your changes:\n" +
 			"   1. Confirm the code builds clean.\n" +
 			"   2. Commit your changes.\n" +
-			"   3. Run 'pull' to merge the latest known-good code into your local copy.\n" +
-			"      (If there's a merge conflict, fix it and commit.)\n" +
-			"   4. Confirm the merged code builds clean. (If it doesn't, fix the problem\n" +
-			"      and start over.)\n" +
+			"   3. Run `ci pull` to merge the latest known-good code into your local copy.\n" +
+			"      ==> If there's a merge conflict, fix it and commit.\n" +
+			"   4. Confirm the merged code builds clean.\n" +
+			"      ==> If it doesn't, fix the problem and start over.\n" +
 			"   5. Confirm that the integration machine is available and no one has\n" +
-			"      integrated since you pulled. (If they have, start over when they're done.)\n" +
-			"   6. Run 'push' to copy your code to the integration machine.\n" +
-			"   7. Run 'promote' on the integration machine to build the code and merge it\n" +
-			"      into the integration branch. (If the integration machine build fails,\n" +
-			"      fix the problem on your machine and start over.)\n"
+			"      integrated since you pulled.\n" +
+			"      ==> If they have, start over when they're done integrating.\n" +
+			"   6. Run `ci push` to copy your code to the integration machine.\n" +
+			"   7. Run `ci promote` on the integration machine to build the code and merge it\n" +
+			"      into the integration branch.\n" +
+			"      ==> If the build fails, fix the problem on your machine and start over.\n"
 		);
 	});
 
@@ -78,7 +79,7 @@ var BUILD_COMMAND = "./jake.sh";
 		}
 
 		sh([
-			"git clean -fd",                            // Remove extraneous files
+			"git clean -fdx",                           // Remove extraneous files
 			"git fetch origin",                         // Get latest from integration machine
 			"git reset --hard origin/integration"       // Sync with latest position of integration branch
 		], complete);
